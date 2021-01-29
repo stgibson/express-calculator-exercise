@@ -26,7 +26,7 @@ function getMedian(nums) {
   }
   // otherwise, get middle number
   else {
-    return nums[nums.length / 2];
+    return nums[Math.trunc(nums.length / 2)];
   }
 }
 
@@ -48,12 +48,14 @@ function getMode(nums) {
   }
   // find the number that occurs most in num
   let mode = 0;
-  for (let num in nums) {
-    if (frequencies[num] > mode) {
+  let max_freq = 0;
+  for (let num in frequencies) {
+    if (frequencies[num] > max_freq) {
+      max_freq = frequencies[num];
       mode = num;
     }
   }
-  return mode;
+  return Number(mode);
 }
 
 module.exports = { getMean, getMedian, getMode };
