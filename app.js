@@ -27,8 +27,8 @@ app.get("/mean", (req, res, next) => {
         nums[i] = num;
       }
     }
-    const mean = getMean(nums);
-    return res.send({ operation: "mean", value: mean });
+    const value = getMean(nums);
+    return res.send({ operation: "mean", value });
   }
   else {
     const missingParam = new ExpressError("nums are required", 400);
@@ -51,8 +51,8 @@ app.get("/median", (req, res, next) => {
         nums[i] = num;
       }
     }
-    const median = getMedian(nums);
-    return res.send({ operation: "median", value: median });
+    const value = getMedian(nums);
+    return res.send({ operation: "median", value });
   }
   else {
     const missingParam = new ExpressError("nums are required", 400);
@@ -75,8 +75,34 @@ app.get("/mode", (req, res, next) => {
         nums[i] = num;
       }
     }
+    const value = getMode(nums);
+    return res.send({ operation: "mode", value });
+  }
+  else {
+    const missingParam = new ExpressError("nums are required", 400);
+    return next(missingParam);
+  }
+});
+
+app.get("/all", (req, res, next) => {
+  const numsString = req.query["nums"];
+  if (numsString) {
+    const nums = numsString.split(",");
+    for (let i = 0; i < nums.length; i++) {
+      const num = Number(nums[i]);
+      if (!num) {
+        const notANumberError = new
+          ExpressError(`${nums[i]} is not a number`, 400);
+          return next(notANumberError);
+      }
+      else {
+        nums[i] = num;
+      }
+    }
+    const mean = getMean(nums);
+    const median = getMedian(nums);
     const mode = getMode(nums);
-    return res.send({ operation: "mode", value: mode });
+    return res.send({ operation: "all", mean, median, mode });
   }
   else {
     const missingParam = new ExpressError("nums are required", 400);
